@@ -10,7 +10,7 @@ Library is still in early phase of development and has only few features:
 * marking emails as read
 * getting links from received emails
 
-List of keywords provided by this library:
+##Keywords##
 
 * Open Mailbox
 * Close Mailbox
@@ -18,3 +18,5 @@ List of keywords provided by this library:
 * Wait For Mail
 * Mark Email As Read
 * Get All Links From Email
+
+You can check their documentation when using RIDE.
