@@ -10,7 +10,14 @@ Library is still in early phase of development and has only few features:
 * marking emails as read
 * getting links from received emails
 
-##Keywords##
+####Instalation####
+
+You can install library with easy_install (you may need root permissions):
+
+    easy_install http://github.com/korda/robotframework-mail/tarball/master
+
+
+####Keywords####
 
 * Open Mailbox
 * Close Mailbox
@@ -20,3 +27,4 @@ Library is still in early phase of development and has only few features:
 * Get All Links From Email
 
 You can check their documentation when using RIDE.
+
