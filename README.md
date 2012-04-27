@@ -26,5 +26,5 @@ You can install library with easy_install (you may need root permissions):
 * Mark Email As Read
 * Get All Links From Email
 
-You can check their documentation when using RIDE.
+You can check their documentation when using [https://github.com/robotframework/RIDE](RIDE).
 
