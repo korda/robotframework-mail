@@ -30,16 +30,9 @@ class _MailKeywords(KeywordGroup):
 		Returns list of numbers, you can use them to retrive data from emails with
 		other keywords.
 		"""
-		if email is None:
-			r, item = self.mailbox.search(None, 'UNSEEN')
-		else:
-			r, item = self.mailbox.search(None, 'UNSEEN', 'FROM', email)
+		return self._get_emails(email)
 
-		item = item[0].split()
-
-		return item
-
-	def wait_for_mail(self, timeout=60,email=None):
+	def wait_for_mail(self, timeout=120,email=None):
 		"""
 		Waits until unread email(s) show up. Note that it will exit at once if there is a
 		unread email already in mailbox.
@@ -56,30 +49,29 @@ class _MailKeywords(KeywordGroup):
 		it checks for all unread emails.
 		"""
 		
+
 		timeout = int(timeout)
 
+		
+
 		while (timeout >= 20):
-			if email is None:
-				r, item = self.mailbox.search(None, 'UNSEEN')
-			else:
-				r, item = self.mailbox.search(None, 'UNSEEN', 'FROM', email)
-			if len(item[0].split()) > 0:
-				return item[0]
+			self.mailbox.recent()
+			emails = self._get_emails(email)
+			if len(emails) > 0:
+				return emails[0]
 			time.sleep(20)
 			timeout = timeout - 20
 
 		if timeout > 0:
 			time.sleep(timeout)
 
-		if email is None:
-			r, item = self.mailbox.search(None, 'UNSEEN')
-		else:
-			r, item = self.mailbox.search(None, 'UNSEEN', 'FROM', email)
 
-		if len(item[0].split()) > 0:
-			return item[0]
+		self.mailbox.recent()
+		emails = self._get_emails(email)
+		if len(emails) > 0:
+			return emails[0]
 
-		raise AssertionError("No mail found")       
+		raise AssertionError("No mail found. Timeleft: " + str(timeout))       
 
 
 
@@ -91,17 +83,12 @@ class _MailKeywords(KeywordGroup):
 		it searches for emails recived from `email` and marks them as read.
 
 		"""
-		if email is None:
-			r, item = self.mailbox.search(None, 'UNSEEN')
-			item = item[0].split()
-			for num in item:
-				self.mailbox.store(num,'+FLAGS','\Seen')
-		elif isinstance(email, int):
+
+		if isinstance(email, int) and email is not None: 
 			self.mailbox.store(email,'+FLAGS','\Seen')
 		else:
-			r, item = self.mailbox.search(None, 'UNSEEN', 'FROM', email)
-			item = item[0].split()
-			for num in item:
+			emails = self._get_emails(email)
+			for num in emails:
 				self.mailbox.store(num,'+FLAGS','\Seen')
 
 
@@ -118,3 +105,11 @@ class _MailKeywords(KeywordGroup):
 			links.append(link.get('href'))
 
 		return links
+
+	def _get_emails(self, email):
+		if email is None:
+			r, item = self.mailbox.search(None, 'UNSEEN')
+		else:
+			r, item = self.mailbox.search(None, 'UNSEEN', 'FROM', email)
+
+		return   item[0].split()
